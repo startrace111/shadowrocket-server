@@ -1,0 +1,13 @@
+[Unit]
+Description=Shadowrocket 配置处理服务
+After=network.target
+
+[Service]
+WorkingDirectory=/root/net-tools/shadowrocket-server
+ExecStart=/bin/bash /root/net-tools/shadowrocket-server/start.sh
+Restart=always
+RestartSec=3
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
