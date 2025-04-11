@@ -19,9 +19,13 @@ def strip_outer_parentheses(s):
     return s
 
 
-def get_node_group(text):
+def get_node_group(text, extra=None):
+    if extra:
+        converted = extra
+    else:
+        converted = []
+
     lines = text.strip().splitlines()
-    converted = []
     startflag = False
     for line in lines:
         if startflag:
@@ -74,8 +78,11 @@ def get_node_group(text):
     return '\n'.join(converted)
 
 
-def get_strategy_group(input_text):
-    output_lines = []
+def get_strategy_group(input_text, extra=None):
+    if extra:
+        output_lines = extra
+    else:
+        output_lines = []
 
     for line in input_text.splitlines():
         if '3、节点组' in line:
@@ -129,8 +136,11 @@ def get_github_config(url):
         return -1
 
 
-def get_url_group(input_text):
-    output_lines = []
+def get_url_group(input_text, extra=None):
+    if extra:
+        output_lines = extra
+    else:
+        output_lines = []
     for line in input_text.splitlines():
         line = line.strip()
         if line.startswith("ruleset"):
@@ -197,10 +207,12 @@ def modify_shadowrocket_conf(input_path, output_path, node_group, strategy_group
 
 def download_ini_and_modify(input_path, output_path):
     url = 'https://gh-proxy.com/raw.githubusercontent.com/startrace111/clash/refs/heads/main/Cash-All.ini'
+    # 回家规则
+    extra_rules = [
+        'IP-CIDR,192.168.31.0/24,PASSWALL,no-resolve'
+    ]
     githubconf = get_github_config(url)
     node_group = get_node_group(githubconf)
-    url_group = get_url_group(githubconf)
+    url_group = get_url_group(githubconf, extra=extra_rules)
     strategy_group = get_strategy_group(githubconf)
-    # input_path = '/Users/zhuanjie/fuckGFW/ChatGPT京东emby迅雷old3.conf'
-    # output_path = '/Users/zhuanjie/fuckGFW/ChatGPT京东emby迅雷convert.conf'
     modify_shadowrocket_conf(input_path, output_path, node_group, strategy_group, url_group)
