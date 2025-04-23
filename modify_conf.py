@@ -206,7 +206,12 @@ def modify_shadowrocket_conf(input_path, output_path, node_group, strategy_group
         f.writelines(modified_lines)
 
 def download_ini_and_modify(input_path, output_path):
-    url = 'https://gh-proxy.com/raw.githubusercontent.com/startrace111/clash/refs/heads/main/Cash-All.ini'
+    with open(input_path) as f:
+        lines = f.readlines()
+        if 'other: true' in lines[2]:
+            url = 'https://gh-proxy.com/raw.githubusercontent.com/startrace111/clash/refs/heads/main/Cash-ALL-other.ini'
+        else:
+            url = 'https://gh-proxy.com/raw.githubusercontent.com/startrace111/clash/refs/heads/main/Cash-All.ini'
     # 回家规则
     extra_rules = [
         'IP-CIDR,192.168.31.0/24,PASSWALL,no-resolve'
